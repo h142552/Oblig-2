@@ -24,7 +24,7 @@ public class Vare {
     }
     
     public float moms(){
-        return (float) this.pris / 5.0f;
+        return (float) this.pris * 0.20f;
     }
 
     public boolean billigereEnn(Vare v){
