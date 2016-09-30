@@ -3,14 +3,17 @@ import java.util.Random;
 
 public class Oppgave3 {
     private int antallKast = 100;
-    private int[] kast = new int[antallKast];
-    private int[] antall  = new int[antallKast / 20];
-    private int gjennomsnitt = 0;
+    private int[] kast;
+    private int[] antall;
+    private double gjennomsnitt = 0.0;
     private int flestAntall = 0;
     private int antallFør6 = 0;
 
     // Default konstruktør
     public Oppgave3(){
+        this.kast = new int[antallKast];
+        this.antall = new int[6];
+
         kastTerning();
         finnAntall();
         finnGjennomsnitt();
@@ -21,6 +24,8 @@ public class Oppgave3 {
     // Konstruktør med parameter
     public Oppgave3(int antallKast){
         this.antallKast = antallKast;
+        this.kast = new int[antallKast];
+        this.antall = new int[6];
 
         kastTerning();
         finnAntall();
@@ -31,10 +36,10 @@ public class Oppgave3 {
 
     // Skriver ut alle resultatene
     public void start(){
-        System.out.print("\t\tTERNINGKASTSIMULATOR\n");
-        System.out.print(skrivKast());
+        System.out.print("\tTERNINGKASTSIMULATOR\n");
+        skrivKast();
         System.out.print("\nAntall kast: " + this.antallKast);
-        System.out.print(skrivAntall());
+        skrivAntall();
         System.out.print("\nGjennomsnittskast: " + this.gjennomsnitt + 1);
         System.out.print("\nAntall kast for å få den første 6-eren: " + antallFør6);
         System.out.print("\nTerningverdien det var flest av: " + flestAntall);
@@ -44,18 +49,18 @@ public class Oppgave3 {
     public void kastTerning(){
         Random rand = new Random();
         for(int i = 0; i < antallKast; i++)
-            rand.nextInt(6); // 0 = 1, 1 = 2, ... , 5 = 6
+            this.kast[i] = rand.nextInt(6); // 0 = 1, 1 = 2, ... , 5 = 6
     }
     
     // Skriver ut alle kastene
     public void skrivKast(){
-        for(int i = 0; i < (antallKast / 20); i++){     // 5 * 20 = 100
-            for(int j = 0; j < 20; j++)
-                System.out.print(this.kast[i] + " ");
-            System.out.println();
+        for(int i = 0; i < antallKast; i++){
+            if(i % 20 == 0) // Printer ny linje hver 20-ende tall
+                System.out.println();
+            System.out.print(this.kast[i] + 1 + " ");
         }
     }
-    
+
     // Skriver ut antall av hvert kast
     public void skrivAntall(){
         for(int i = 0; i < 6; i++)
@@ -74,13 +79,13 @@ public class Oppgave3 {
         for(int i = 0; i < antallKast; i++)
             sum += this.kast[i];
 
-        this.gjennomsnitt = sum / 100;
+        this.gjennomsnitt = (double)sum / 100.0 + 1;
     }
 
     // Finner hvor mange tall som kommer før den første 6-eren
     private void finnAntallFør6(){
         this.antallFør6 = 0;
-        for(int i = 0; i < antallKast; i++){ // Kan bytte til enkel for-løkke
+        for(int i = 0; i < antallKast; i++){ 
             if(this.kast[i] != 5) // 5 = 6
                 this.antallFør6++;
             else
@@ -91,9 +96,14 @@ public class Oppgave3 {
     // Finner hvilken verdi som har flest, og lagrer det i 'flestAntall'
     private void finnFlest(){
         this.flestAntall = 0;
-        for(int i : this.antall)
-            if(this.flestAntall < i)
-                this.flestAntall = i;
+        int høyesteVerdi = 0;
+
+        for(int i = 0; i < 6; i++){
+            if(høyesteVerdi < antall[i]){
+                høyesteVerdi = antall[i];
+                this.flestAntall = i + 1;
+            }
+        }
     }
 }
 
